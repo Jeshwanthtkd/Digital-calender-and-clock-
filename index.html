@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Clock & Alarm</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for the UI icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <i class="fa-solid fa-bars menu-icon"></i>
+                <span class="logo-text-blue">Clock</span><span class="logo-text-black">Online</span>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" data-tab="tab-alarm"><i class="fa-regular fa-clock"></i> Alarm Clock</button>
+                <button class="nav-btn" data-tab="tab-timer"><i class="fa-solid fa-stopwatch-20"></i> Timer</button>
+                <button class="nav-btn" data-tab="tab-stopwatch"><i class="fa-solid fa-stopwatch"></i> Stopwatch</button>
+                <button class="nav-btn" data-tab="tab-countdown"><i class="fa-solid fa-hourglass-half"></i> Countdown</button>
+                <button class="nav-btn" data-tab="tab-worldclock"><i class="fa-solid fa-globe"></i> World Clock</button>
+            </div>
+        </div>
+        <div class="nav-right">
+            <button class="dropdown-btn">US English <i class="fa-solid fa-chevron-down"></i></button>
+            <button class="icon-btn"><i class="fa-solid fa-gear"></i> Settings</button>
+            <button class="btn-green" id="fullscreenBtn"><i class="fa-solid fa-expand"></i> Fullscreen</button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1 id="hero-title">Online Clock & Alarm</h1>
+            <p id="hero-subtitle">A dependable, free, and simple alarm clock that runs instantly in your browser, no downloads required.</p>
+        </div>
+
+        <!-- ALARM CLOCK TAB (Active by default) -->
+        <div id="tab-alarm" class="tab-content active">
+            <div class="display-container light-blue-bg">
+                <div class="time-display">
+                    <span id="main-clock">00:00:00</span>
+                    <span class="am-pm" id="main-ampm">AM</span>
+                </div>
+                <div class="date-display" id="main-date">Loading date...</div>
+            </div>
+            <div class="controls-container">
+                <h3>Set a new alarm</h3>
+                <div class="alarm-inputs">
+                    <button class="ctrl-btn" id="hour-minus">-</button>
+                    <select class="time-select" id="alarm-hour">
+                        <!-- JS will populate 1-12 -->
+                    </select>
+                    <span class="colon">:</span>
+                    <button class="ctrl-btn" id="minute-minus">-</button>
+                    <select class="time-select" id="alarm-minute">
+                        <!-- JS will populate 00-59 -->
+                    </select>
+                    <button class="ctrl-btn" id="minute-plus">+</button>
+                    <select class="time-select" id="alarm-ampm">
+                        <option value="AM">AM</option>
+                        <option value="PM">PM</option>
+                    </select>
+                </div>
+                <button class="action-btn" id="setAlarmBtn">Set Alarm</button>
+                <div id="active-alarms-list" class="alarms-list"></div>
+            </div>
+        </div>
+
+        <!-- TIMER TAB -->
+        <div id="tab-timer" class="tab-content">
+            <div class="display-container light-blue-bg">
+                <div class="time-display">
+                    <span id="timer-display">00:05:00</span>
+                </div>
+            </div>
+            <div class="controls-container">
+                <div class="timer-inputs">
+                    <input type="number" id="timer-h" value="0" min="0" max="99" class="time-input">
+                    <span>h</span>
+                    <input type="number" id="timer-m" value="5" min="0" max="59" class="time-input">
+                    <span>m</span>
+                    <input type="number" id="timer-s" value="0" min="0" max="59" class="time-input">
+                    <span>s</span>
+                </div>
+                <div class="btn-group">
+                    <button class="action-btn start-btn" id="timer-start">Start</button>
+                    <button class="action-btn pause-btn" id="timer-pause" style="display:none;">Pause</button>
+                    <button class="action-btn reset-btn" id="timer-reset">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STOPWATCH TAB -->
+        <div id="tab-stopwatch" class="tab-content">
+            <div class="display-container light-blue-bg">
+                <div class="time-display">
+                    <span id="stopwatch-display">00:00:00</span><span class="ms" id="stopwatch-ms">.00</span>
+                </div>
+            </div>
+            <div class="controls-container">
+                <div class="btn-group">
+                    <button class="action-btn start-btn" id="stopwatch-start">Start</button>
+                    <button class="action-btn pause-btn" id="stopwatch-pause" style="display:none;">Stop</button>
+                    <button class="action-btn reset-btn" id="stopwatch-reset">Reset</button>
+                    <button class="action-btn" id="stopwatch-lap">Lap</button>
+                </div>
+                <div id="lap-list" class="lap-list"></div>
+            </div>
+        </div>
+
+        <!-- COUNTDOWN TAB -->
+        <div id="tab-countdown" class="tab-content">
+            <div class="display-container light-blue-bg">
+                <div class="countdown-grid">
+                    <div class="cd-item"><span id="cd-days">0</span><label>Days</label></div>
+                    <div class="cd-item"><span id="cd-hours">00</span><label>Hours</label></div>
+                    <div class="cd-item"><span id="cd-mins">00</span><label>Minutes</label></div>
+                    <div class="cd-item"><span id="cd-secs">00</span><label>Seconds</label></div>
+                </div>
+            </div>
+            <div class="controls-container">
+                <h3>Target Date</h3>
+                <input type="datetime-local" id="countdown-target" class="time-select" style="width:auto; margin-bottom: 20px;">
+                <br>
+                <button class="action-btn" id="start-countdown">Start Countdown</button>
+            </div>
+        </div>
+
+        <!-- WORLD CLOCK TAB -->
+        <div id="tab-worldclock" class="tab-content">
+            <div class="controls-container" style="border-radius: 8px;">
+                <div class="world-clock-grid" id="world-clock-grid">
+                    <!-- JS populated -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
